@@ -1,0 +1,23 @@
+{
+  "name": "pixelrealm",
+  "version": "1.0.0",
+  "description": "Pixel Realm - 2D pixel sandbox",
+  "author": "Mudiastira <dias@pixelrealm.app>",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "npx serve www",
+    "dist": "electron-builder --publish never"
+  },
+  "dependencies": { "@capacitor/android": "^6.1.2", "@capacitor/core": "^6.1.2" },
+  "devDependencies": { "@capacitor/cli": "^6.1.2", "electron": "^31.0.0", "electron-builder": "^24.13.3" },
+  "build": {
+    "appId": "com.mudiastira.pixelrealm",
+    "productName": "Pixel Realm",
+    "files": ["www/**", "electron/**"],
+    "directories": { "output": "dist", "buildResources": "build" },
+    "win": { "target": "portable" },
+    "linux": { "target": "AppImage", "category": "Game" },
+    "mac": { "target": "zip", "category": "public.app-category.games" }
+  }
+}

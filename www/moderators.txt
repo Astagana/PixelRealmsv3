@@ -3,5 +3,6 @@
 # Moderator boleh memakai /gems jumlah dan /warp nama. Simpan file ini lalu deploy ulang.
 #
 # Contoh (hapus tanda # untuk mengaktifkan):
-# budi
-# siti
+# 
+# 
+Diaszty

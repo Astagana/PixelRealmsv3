@@ -1,0 +1,7 @@
+# Daftar moderator PixelRealm. Satu username per baris (huruf besar/kecil tidak berpengaruh).
+# Baris yang diawali tanda # diabaikan. Akun developer Diaszt selalu moderator otomatis.
+# Moderator boleh memakai /gems jumlah dan /warp nama. Simpan file ini lalu deploy ulang.
+#
+# Contoh (hapus tanda # untuk mengaktifkan):
+# budi
+# siti

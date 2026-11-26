@@ -48,10 +48,14 @@ const strHash=s=>{let h=5381;for(const c of s)h=(h*33+c.charCodeAt(0))%1000003;r
 // ---------- tile atlas (drawn in code, no image files) ----------
 const mk=f=>{const c=document.createElement('canvas');c.width=c.height=T;f(c.getContext('2d'));return c};
 const F=(x,a,b,w,h,c)=>{x.fillStyle=c;x.fillRect(a,b,w,h)};
+// ---------- CUSTOM LOCK ASSETS ----------
 const A_GoldLock = new Image();
 A_GoldLock.src = 'www/assets/gold_lock.png';
+
 const A_DiamondLock = new Image();
 A_DiamondLock.src = 'www/assets/diamond_lock.png';
+
+// Override atau daftarkan ke atlas A
 A[40] = A_GoldLock;
 A[41] = A_DiamondLock;
 const sp=(x,r,cols,n,y0=0,y1=T)=>{for(let i=0;i<n;i++)F(x,r()*T|0,y0+(r()*(y1-y0)|0),1,1,cols[r()*cols.length|0])};

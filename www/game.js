@@ -19,7 +19,7 @@ const DEF={
 12:{n:'Sapling',h:1,c:'#78d654'},
 13:{n:'Tree',h:3,c:'#348a3a'},
 40:{n:'Gold Lock',h:8,s:1,p:1,c:'#ffc247'},
-41:{n:'Diamond Lock',h:8,s:1,p:1,c:'#4fd8ff'},
+41:{n:'Diamond Lock',h:10,s:1,p:1,c:'#4fd8ff'},
 16:{n:'Pepper Sprout',h:1,c:'#7bc043'},
 17:{n:'Pepper Tree',h:2,c:'#2f8f3a'},
 31:{n:'Pepper',p:1,c:'#d92f2f'},

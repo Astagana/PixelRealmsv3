@@ -39,7 +39,7 @@ const DEF={
 const CAVE={n:'Cave',h:2,c:'#1b1311'};   // black cave tile (dug out or natural): breakable, drops Dirt or a Seed
 const DAYLEN=360,LANT=[];
 const GROWS={12:[13,GROW],16:[17,45]};   // leftover of a broken block: breakable, drops a Dirt block or a Seed
-const SHOP=[[8,10,15],[7,10,25],[6,20,10],[3,20,30],[9,10,40],[30,5,20],[40,1,500],[31,1,10,5],[43,1,800],[44,1,2000],[45,1,600],[46,3,25],[18,10,10],[19,3,30],[20,3,40]];
+const SHOP=[[8,10,15],[7,10,25],[6,20,10],[3,20,30],[9,10,40],[30,5,20],[40,1,500],[31,1,10,5],[43,1,800],[44,1,2000],[45,1,600],[46,3,25],[18,10,10],[19,3,30],[20,3,40], [47, 1, 300]];
 
 // ---------- rng / noise ----------
 const mb=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};

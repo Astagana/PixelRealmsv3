@@ -582,6 +582,29 @@ $('#bP').onclick=punch;$('#tP').addEventListener('pointerdown',e=>{if(hudEdit)re
 function runCmd(t){
  const[a,...r]=t.slice(1).trim().split(/\s+/),cmd=a.toLowerCase(),who=(r[0]||'').replace(/^@/,'').toLowerCase();
  if(cmd==='player'||cmd==='players'){listPlayers();return}
+ if(cmd==='find'){
+ if(!isMod(me.username)){toast('Only moderators can use /find');return}
+ if(!r.length){
+  const list=Object.entries(DEF).filter(([,d])=>d.p).map(([id,d])=>`${id}:${d.n}`).join(', ');
+  sysMsg('Items: '+list);
+  return;
+ }
+ let qty=10;
+ if(r.length>1 && /^\d+$/.test(r[r.length-1])){
+  qty=clamp(parseInt(r.pop(),10),1,999);
+ }
+ const query=r.join(' ').toLowerCase();
+ const found=Object.entries(DEF).find(([id,d])=>d.p && (id===query || d.n.toLowerCase().includes(query)));
+ if(!found){toast('Item not found: '+query);return}
+
+ const[itemId,itemDef]=found;
+ add(+itemId,qty,1);
+ refreshHotbar();
+ saveAll();
+ snd(600,.1,'triangle',.05,880);
+ sysMsg(`Given ${qty}x ${itemDef.n} (ID: ${itemId})`);
+ return;
+ }
  if(cmd==='gems'||cmd==='warp'){if(!isMod(me.username)){toast('Only moderators can use /'+cmd);return}if(cmd==='gems')giveGems(r[0]);else warpTo(who);return}
  if(cmd!=='pull'&&cmd!=='kick'){toast('Commands: /player, /pull name, /kick name'+(isMod(me.username)?', /gems amount, /warp name':''));return}
  if(!(WS.locked&&WS.owner===me.id)&&!isMod(me.username)){toast('Only the world owner or a moderator can use /'+cmd);return}

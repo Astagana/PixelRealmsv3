@@ -48,16 +48,6 @@ const strHash=s=>{let h=5381;for(const c of s)h=(h*33+c.charCodeAt(0))%1000003;r
 // ---------- tile atlas (drawn in code, no image files) ----------
 const mk=f=>{const c=document.createElement('canvas');c.width=c.height=T;f(c.getContext('2d'));return c};
 const F=(x,a,b,w,h,c)=>{x.fillStyle=c;x.fillRect(a,b,w,h)};
-// ---------- CUSTOM LOCK ASSETS ----------
-const A_GoldLock = new Image();
-A_GoldLock.src = 'www/assets/gold_lock.png';
-
-const A_DiamondLock = new Image();
-A_DiamondLock.src = 'www/assets/diamond_lock.png';
-
-// Override atau daftarkan ke atlas A
-A[40] = A_GoldLock;
-A[41] = A_DiamondLock;
 const sp=(x,r,cols,n,y0=0,y1=T)=>{for(let i=0;i<n;i++)F(x,r()*T|0,y0+(r()*(y1-y0)|0),1,1,cols[r()*cols.length|0])};
 const bevel=x=>{F(x,0,0,T,1,'rgba(255,255,255,.14)');F(x,0,0,1,T,'rgba(255,255,255,.1)');F(x,0,T-1,T,1,'rgba(0,0,0,.22)');F(x,T-1,0,1,T,'rgba(0,0,0,.18)')};
 const A={};
@@ -77,6 +67,8 @@ A[12]=mk(x=>{F(x,7,9,2,7,'#4f8f2e');F(x,4,8,4,2,'#78d654');F(x,8,5,4,2,'#78d654'
 A[13]=mk(x=>{const r=mb(13);F(x,6,9,4,7,'#7a4f2a');F(x,6,9,1,7,'#5e3b1d');for(let yy=0;yy<12;yy++)for(let xx=0;xx<16;xx++){const d=(xx-7.5)**2+(yy-5.5)**2;if(d<=30)F(x,xx,yy,1,1,['#348a3a','#2a7430','#43a248'][r()*3|0])}F(x,5,3,2,1,'#6cc66e');F(x,9,2,2,1,'#6cc66e');F(x,10,6,2,2,'#d9402e')});
 A[5]=[0,1].map(f=>mk(x=>{const r=mb(50+f);F(x,0,0,T,T,'#e8501a');sp(x,r,['#ff8a2a','#ffd24a','#c43a10','#ff9a3a'],70)}));
 A[30]=mk(x=>{F(x,6,5,4,6,'#96dc5a');F(x,5,6,6,4,'#96dc5a');F(x,6,5,2,2,'#c6f08f');F(x,9,9,1,2,'#5f9a30')});
+A[40]=mk(x=>{F(x,0,0,T,T,'#d9a62a');sp(x,mb(40),['#f2c94c','#b98a1c','#e8b83a'],40);F(x,6,2,1,6,'#c9d4f2');F(x,9,2,1,6,'#c9d4f2');F(x,6,2,4,1,'#c9d4f2');F(x,4,7,8,7,'#7a5410');F(x,5,8,6,5,'#ffc247');F(x,7,9,2,2,'#2b1d14');F(x,7,11,2,1,'#2b1d14');bevel(x)});
+A[41]=mk(x=>{F(x,0,0,T,T,'#2aa8d8');sp(x,mb(41),['#7fe0ff','#1b8fc0','#4fd8ff'],40);F(x,6,2,1,6,'#e8f8ff');F(x,9,2,1,6,'#e8f8ff');F(x,6,2,4,1,'#e8f8ff');F(x,4,7,8,7,'#0f5f80');F(x,5,8,6,5,'#4fd8ff');F(x,7,9,2,2,'#0b2d3d');F(x,7,11,2,1,'#0b2d3d');bevel(x)});
 A[18]=mk(x=>{F(x,3,0,2,T,'#a5703c');F(x,11,0,2,T,'#a5703c');F(x,3,0,1,T,'#c28a4a');F(x,11,0,1,T,'#c28a4a');for(let y=2;y<T;y+=4)F(x,5,y,6,2,'#7d5128')});
 A[19]=mk(x=>{F(x,0,0,T,T,'#2f9a40');F(x,0,0,T,3,'#7be07b');F(x,7,5,2,7,'#fff');F(x,5,7,2,2,'#fff');F(x,9,7,2,2,'#fff');F(x,3,9,2,2,'#fff');F(x,11,9,2,2,'#fff');bevel(x)});
 A[20]=mk(x=>{F(x,6,1,4,2,'#5a3a1b');F(x,4,3,8,10,'#c28a2a');F(x,5,4,6,8,'#ffd66b');F(x,7,5,2,5,'#fff2b0');F(x,5,13,6,2,'#5a3a1b')});

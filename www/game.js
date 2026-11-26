@@ -34,7 +34,7 @@ const DEF={
 15:{n:'Open Gate',h:3,c:'#8a5a2b'},
 42:{n:'Wrench',p:1,nopl:1,perm:1,c:'#c9d4f2'},
 30:{n:'Seed',p:1,c:'#96dc5a'}};
-47: {n:'Malevolent Luminary Hair', perm:1, cur:1, isAnimatedHair:1, c:'#b8873a'},
+47:{n:'Malevolent Luminary Hair', perm:1, cur:1, isAnimatedHair:1, c:'#b8873a'},
  
 const CAVE={n:'Cave',h:2,c:'#1b1311'};   // black cave tile (dug out or natural): breakable, drops Dirt or a Seed
 const DAYLEN=360,LANT=[];
@@ -595,6 +595,34 @@ $('#bP').onclick=punch;$('#tP').addEventListener('pointerdown',e=>{if(hudEdit)re
 function runCmd(t){
  const[a,...r]=t.slice(1).trim().split(/\s+/),cmd=a.toLowerCase(),who=(r[0]||'').replace(/^@/,'').toLowerCase();
  if(cmd==='player'||cmd==='players'){listPlayers();return}
+ // ---------- punch + owner/dev commands ----------
+let pcd=0;
+function punch(){
+ if(!playing||pcd>0||anyModal()||hudEdit)return;pcd=.32;P.pt=.3;P.arm=.15;snd(200,.08,'square',.05,90);
+ const tx=Math.floor(P.x+P.f*(PW+.45)),ty=Math.floor(P.y-.5),o=sel;sel=0;act(tx,ty);sel=o}
+$('#bP').onclick=punch;$('#tP').addEventListener('pointerdown',e=>{if(hudEdit)return;e.preventDefault();punch()});
+function runCmd(t){
+ const[a,...r]=t.slice(1).trim().split(/\s+/),cmd=a.toLowerCase(),who=(r[0]||'').replace(/^@/,'').toLowerCase();
+ if(cmd==='player'||cmd==='players'){listPlayers();return}
+ if(cmd==='gems'||cmd==='warp'){if(!isMod(me.username)){toast('Only moderators can use /'+cmd);return}if(cmd==='gems')giveGems(r[0]);else warpTo(who);return}
+ if(cmd!=='pull'&&cmd!=='kick'){toast('Commands: /player, /pull name, /kick name'+(isMod(me.username)?', /gems amount, /warp name':''));return}
+ if(!(WS.locked&&WS.owner===me.id)&&!isMod(me.username)){toast('Only the world owner or a moderator can use /'+cmd);return}
+ if(!who){toast('Usage: /'+cmd+' name');return}
+ const id=Object.keys(RP).find(k=>(RP[k].name||'').toLowerCase()===who);
+ if(!id){toast('That player is not in this world');return}
+ if(prot(RP[id].name)){toast('You cannot target staff');return}
+ Net.send('cmd',{k:cmd,to:id,from:me.id,fn:me.username,x:+P.x.toFixed(2),y:+P.y.toFixed(2)});sysMsg('/'+cmd+' '+RP[id].name)}
+async function onCmd(p){
+ if(!me||p.to!==me.id)return;
+ const sd=RP[p.from],staff=!!sd&&isMod(sd.name);
+ let ok=staff||(WS.locked&&p.from===WS.owner);
+ if(!ok&&Net.worldMeta){try{const r=await Net.worldMeta(name);if(r&&r.locked&&r.owner===p.from){WS={owner:r.owner,ownerName:r.owner_name||'',locked:true,access:r.access||[],banned:r.banned||[]};ok=true}}catch(e){}}
+ if(!ok)return;
+ if((isDev(me.username)&&!(sd&&isDev(sd.name)))||(isMod(me.username)&&!staff))return;
+ if(p.k==='pull'&&typeof p.x==='number'&&typeof p.y==='number'){P.x=clamp(p.x,1.5,W-1.5);P.y=clamp(p.y,2,H-3);P.vx=P.vy=0;cam.x=P.x;cam.y=P.y-.5;toast('Pulled by '+p.fn)}
+ else if(p.k==='kick')die('Kicked by '+p.fn);
+ else if(p.k==='ban'){toast('Banned from this world by '+p.fn);enterWorld('START')}}
+ 
  if(cmd==='gems'||cmd==='warp'){if(!isMod(me.username)){toast('Only moderators can use /'+cmd);return}if(cmd==='gems')giveGems(r[0]);else warpTo(who);return}
  if(cmd!=='pull'&&cmd!=='kick'){toast('Commands: /player, /pull name, /kick name'+(isMod(me.username)?', /gems amount, /warp name':''));return}
  if(!(WS.locked&&WS.owner===me.id)&&!isMod(me.username)){toast('Only the world owner or a moderator can use /'+cmd);return}

@@ -1,5 +1,11 @@
 // Lapisan online: akun, world tersimpan, multiplayer (Realtime) dan voice chat (WebRTC, signaling via Realtime)
 (()=>{
+// voice codec: 8 kHz mono, mu-law (8 KB/s while talking)
+const VR=8000,CHK=3200,UL=new Float32Array(256);for(let i=0;i<256;i++){const sg=i&128?-1:1,y=(i&127)/127;UL[i]=sg*(Math.pow(256,y)-1)/255}
+const mu=x=>{x=Math.max(-1,Math.min(1,x));return(x<0?128:0)|Math.min(127,Math.round(Math.log(1+255*Math.abs(x))/Math.log(256)*127))};
+const packV=f=>{const u=new Uint8Array(f.length);for(let i=0;i<f.length;i++)u[i]=mu(f[i]);let s='';for(let i=0;i<u.length;i+=4096)s+=String.fromCharCode.apply(null,u.subarray(i,i+4096));return btoa(s)};
+const unpackV=b=>{try{const s=atob(b),f=new Float32Array(s.length);for(let i=0;i<s.length;i++)f[i]=UL[s.charCodeAt(i)];return f}catch(e){return null}};
+window.PRVoice={packV,unpackV};
 const C=window.PR_CONFIG||{},N=window.Net={on:false};
 if(!(C.SUPABASE_URL&&C.SUPABASE_ANON_KEY&&window.supabase))return;
 N.on=true;
@@ -44,7 +50,7 @@ N.join=async(name,m,h)=>{
  const c=ch=sb.channel('pr:'+name,{config:{broadcast:{self:false},presence:{key:m.id}}});
  c.on('presence',{event:'sync'},()=>{H.presence&&H.presence(c.presenceState());voiceSync()});
  ['pos','edit','chat','lock','cmd','trade'].forEach(ev=>c.on('broadcast',{event:ev},({payload})=>H[ev]&&H[ev](payload)));
- c.on('broadcast',{event:'rtc'},({payload})=>rtc(payload));
+ c.on('broadcast',{event:'voice'},({payload})=>playV(payload));
  c.subscribe(s=>{if(s==='SUBSCRIBED')c.track(meta)})};
 N.leave=async()=>{closePeers();if(ch){const c=ch;ch=null;try{await sb.removeChannel(c)}catch(e){}}};
 N.send=(ev,p)=>{if(ch)ch.send({type:'broadcast',event:ev,payload:p})};
@@ -61,37 +67,31 @@ N.lobby=(m,cb)=>{if(lob)return;lmeta=m;lob=sb.channel('pr:lobby',{config:{presen
  lob.on('presence',{event:'sync'},()=>cb(lob.presenceState()));lob.subscribe(s=>{if(s==='SUBSCRIBED')lob.track(lmeta)})};
 N.lobbyTrack=o=>{if(lob){Object.assign(lmeta,o);lob.track(lmeta)}};
 
-// ----- voice chat (mesh WebRTC) -----
+// ----- voice chat: audio is relayed through the realtime channel, so it works on any network (no TURN needed) -----
+let ac=null,mic=null,node=null,src=null,buf=[],hang=0;const sp={},vols={};N.talking={};
+function voiceSync(){}
+function closePeers(){for(const k in sp){try{sp[k].g.disconnect()}catch(e){}delete sp[k]}}
+N.setVol=(id,v)=>{vols[id]=v;if(sp[id])sp[id].g.gain.value=v};
+function sendChunk(chunk,ratio){
+ if(!ch||!meta)return;const out=new Float32Array(CHK);let e=0;
+ for(let j=0;j<CHK;j++){const a=Math.floor(j*ratio),z=Math.max(a+1,Math.floor((j+1)*ratio));let s=0;for(let i=a;i<z;i++)s+=chunk[i]||0;out[j]=s/(z-a);e+=out[j]*out[j]}
+ const rms=Math.sqrt(e/CHK);if(rms>.012)hang=2;else if(hang>0)hang--;else return;       // skip silence
+ N.send('voice',{id:meta.id,d:packV(out)})}
+function playV(p){
+ if(!ac||!node||!p||typeof p.d!=='string'||!meta||p.id===meta.id)return;
+ const f=unpackV(p.d);if(!f||!f.length)return;N.talking[p.id]=performance.now();
+ let s=sp[p.id];if(!s){const g=ac.createGain();g.gain.value=vols[p.id]??1;g.connect(ac.destination);s=sp[p.id]={g,next:0}}
+ const b=ac.createBuffer(1,f.length,VR);b.copyToChannel(f,0);const a=ac.createBufferSource();a.buffer=b;a.connect(s.g);
+ const t=ac.currentTime;if(s.next<t+.04||s.next>t+1.6)s.next=t+.25;a.start(s.next);s.next+=b.duration}
 N.voice=async on=>{
- if(on){stream=stream||await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});N.track({voice:true})}
- else{closePeers();if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}N.track({voice:false})}
+ if(on){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Microphone needs HTTPS and a supported browser');
+  ac=ac||new(window.AudioContext||window.webkitAudioContext)();await ac.resume();
+  mic=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+  src=ac.createMediaStreamSource(mic);node=ac.createScriptProcessor(4096,1,1);const ratio=ac.sampleRate/VR,need=Math.round(CHK*ratio);
+  node.onaudioprocess=e=>{const inp=e.inputBuffer.getChannelData(0);for(let i=0;i<inp.length;i++)buf.push(inp[i]);while(buf.length>=need)sendChunk(buf.splice(0,need),ratio)};
+  const silent=ac.createGain();silent.gain.value=0;src.connect(node);node.connect(silent);silent.connect(ac.destination);N.track({voice:true})}
+ else{try{node&&node.disconnect();src&&src.disconnect()}catch(e){}if(mic)mic.getTracks().forEach(t=>t.stop());node=src=mic=null;buf=[];closePeers();N.track({voice:false})}
  return on};
-N.setVol=(id,v)=>{if(auds[id])auds[id].volume=v};
-function voiceSync(){
- if(!stream||!ch||!meta)return;const st=ch.presenceState();
- for(const id in st){if(id===meta.id)continue;const m=st[id][0];if(m&&m.voice&&!peers[id]&&meta.id>id)peer(id,true)}
- for(const id in peers)if(!st[id]||!st[id][0].voice)drop(id)}
-const ICE=()=>{const s=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}];
- if(Array.isArray(C.TURN))s.push(...C.TURN);else s.push({urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'});return s};
-const gathered=pc=>new Promise(res=>{if(pc.iceGatheringState==='complete')return res();const t=setTimeout(res,3500);
- pc.addEventListener('icegatheringstatechange',()=>{if(pc.iceGatheringState==='complete'){clearTimeout(t);res()}})});
-function peer(id,init){
- const pc=new RTCPeerConnection({iceServers:ICE()});
- const o=peers[id]={pc,q:[],rd:false};
- stream.getTracks().forEach(t=>pc.addTrack(t,stream));
- pc.ontrack=e=>{let a=auds[id];if(!a){a=auds[id]=new Audio();a.autoplay=true}a.srcObject=e.streams[0]||new MediaStream([e.track]);
-  a.play().catch(()=>addEventListener('pointerdown',()=>a.play().catch(()=>{}),{once:true}))};
- pc.onconnectionstatechange=()=>{if(peers[id]===o&&['failed','closed'].includes(pc.connectionState))drop(id)};
- // no trickle: send one offer/answer that already contains every ICE candidate (far fewer realtime messages)
- if(init)pc.createOffer().then(d=>pc.setLocalDescription(d)).then(()=>gathered(pc)).then(()=>N.send('rtc',{to:id,from:meta.id,k:'offer',d:pc.localDescription}));
- setTimeout(()=>{if(peers[id]===o&&pc.connectionState!=='connected'){drop(id);voiceSync()}},15000);
- return o}
-async function rtc(p){
- if(!stream||!meta||p.to!==meta.id)return;let o=peers[p.from];
- if(p.k==='offer'){if(o)drop(p.from);o=peer(p.from,false);await o.pc.setRemoteDescription(p.d);
-  await o.pc.setLocalDescription(await o.pc.createAnswer());await gathered(o.pc);N.send('rtc',{to:p.from,from:meta.id,k:'answer',d:o.pc.localDescription})}
- else if(o&&p.k==='answer'&&!o.pc.currentRemoteDescription)await o.pc.setRemoteDescription(p.d)}
-function drop(id){const o=peers[id];if(o){delete peers[id];try{o.pc.close()}catch(e){}}if(auds[id]){auds[id].srcObject=null;delete auds[id]}}
-function closePeers(){Object.keys(peers).forEach(drop)}
 })();
 window.Net=window.Net||{on:false};

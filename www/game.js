@@ -34,6 +34,8 @@ const DEF={
 15:{n:'Open Gate',h:3,c:'#8a5a2b'},
 42:{n:'Wrench',p:1,nopl:1,perm:1,c:'#c9d4f2'},
 30:{n:'Seed',p:1,c:'#96dc5a'}};
+47: {n:'Malevolent Luminary Hair', perm:1, cur:1, isAnimatedHair:1, c:'#b8873a'},
+ 
 const CAVE={n:'Cave',h:2,c:'#1b1311'};   // black cave tile (dug out or natural): breakable, drops Dirt or a Seed
 const DAYLEN=360,LANT=[];
 const GROWS={12:[13,GROW],16:[17,45]};   // leftover of a broken block: breakable, drops a Dirt block or a Seed

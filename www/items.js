@@ -38,7 +38,7 @@ window.PR_ITEMS = [
     sheet: 'assets/snapback.png',
     cols: 1, rows: 1, frames: 1, 
     scale: 0.06,
-    anchor: [0.65, 0.85],
+    anchor: [0.55, 0.85],
     layer: 'front',
     trail: 'left'
   }

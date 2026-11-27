@@ -25,7 +25,7 @@ window.PR_ITEMS = [
       [0.68, 0.54], [0.67, 0.53], [0.67, 0.535], [0.70, 0.54]
     ],
     offset: [2.5, -1.5],           // geser manual (px sprite): [maju(+)/mundur(-), turun(+)/naik(-)]
-    faceCut: [5.2, 4.6, 1.0, 4.0], // 'jendela wajah' agar wajah tidak tertutup: [lebar, tinggi, geser x, geser y] px sprite dari titik anchor. Hapus baris ini = tidak dilubangi
+    faceCut: [5.8, 4.8, 1.0, 4.0], // 'jendela wajah' agar wajah tidak tertutup: [lebar, tinggi, geser x, geser y] px sprite dari titik anchor. Hapus baris ini = tidak dilubangi
     layer: 'front',                // 'front' = dipakai di atas kepala/badan, 'back' = di belakang badan
     trail: 'left',                 // arah gambar mengalir: 'left' | 'right' | 'none'. Otomatis dicerminkan agar selalu di belakang karakter
     hideBaseHair: true             // true = sembunyikan rambut bawaan saat dipakai

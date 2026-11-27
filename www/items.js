@@ -37,7 +37,7 @@ window.PR_ITEMS = [
     price: 700,
     sheet: 'assets/snapback.png',
     cols: 1, rows: 1, frames: 1, 
-    scale: 0.22,
+    scale: 0.42,
     anchor: [0.5, 0.85],
     layer: 'front',
     trail: 'left'

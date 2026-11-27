@@ -41,7 +41,23 @@ window.PR_ITEMS = [
     anchor: [0.55, 0.85],
     layer: 'front',
     trail: 'left'
-  }
+  },
+     {
+    id: 103,
+    name: 'Malevolent Hair',
+    slot: 'hair',
+    price: 1500,
+    sheet: 'assets/malevolent_hair.png',
+    cols: 1,
+    rows: 1,
+    frames: 1,
+    scale: 0.12,
+    anchor: [0.5, 0.75],
+    layer: 'front',
+    trail: 'none',
+    hideBaseHair: true
+     }
+   
 
    
 

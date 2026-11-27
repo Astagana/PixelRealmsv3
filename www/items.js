@@ -30,20 +30,19 @@ window.PR_ITEMS = [
     trail: 'left',                 // arah gambar mengalir: 'left' | 'right' | 'none'. Otomatis dicerminkan agar selalu di belakang karakter
     hideBaseHair: true             // true = sembunyikan rambut bawaan saat dipakai
   },
-     {
+       {
     id: 102,
     name: 'Snapback PixelRealm',
     slot: 'hat',
-    price: 1200,
+    price: 700,
     sheet: 'assets/snapback.png',
-    cols: 1,
-    rows: 1,
-    frames: 1,
+    cols: 1, rows: 1, frames: 1, 
     scale: 0.12,
     anchor: [0.5, 0.85],
     layer: 'front',
-    trail: 'none'
-     }
+    trail: 'left'
+  }
+
    
 
   /* CONTOH item tidak beranimasi (cukup 1 frame):

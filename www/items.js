@@ -29,7 +29,22 @@ window.PR_ITEMS = [
     layer: 'front',                // 'front' = dipakai di atas kepala/badan, 'back' = di belakang badan
     trail: 'left',                 // arah gambar mengalir: 'left' | 'right' | 'none'. Otomatis dicerminkan agar selalu di belakang karakter
     hideBaseHair: true             // true = sembunyikan rambut bawaan saat dipakai
-  }
+  },
+     {
+    id: 102,
+    name: 'Snapback PixelRealm',
+    slot: 'hat',
+    price: 1200,
+    sheet: 'assets/snapback.png',
+    cols: 1,
+    rows: 1,
+    frames: 1,
+    scale: 0.12,
+    anchor: [0.5, 0.85],
+    layer: 'front',
+    trail: 'none'
+     }
+   
 
   /* CONTOH item tidak beranimasi (cukup 1 frame):
   ,{ id: 101, name: 'Topi Merah', slot: 'hat', price: 800,

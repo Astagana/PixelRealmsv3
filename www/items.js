@@ -25,7 +25,7 @@ window.PR_ITEMS = [
       [0.68, 0.54], [0.67, 0.53], [0.67, 0.535], [0.70, 0.54]
     ],
     offset: [0, 0],                // geser manual (px sprite): [maju(+)/mundur(-), turun(+)/naik(-)]
-    layer: 'head',                 // 'back' = di belakang badan, 'front' = menutupi badan
+    layer: 'front',                 // 'back' = di belakang badan, 'front' = menutupi badan
     trail: 'left',                 // arah gambar mengalir: 'left' | 'right' | 'none'. Otomatis dicerminkan agar selalu di belakang karakter
     hideBaseHair: true             // true = sembunyikan rambut bawaan saat dipakai
   }

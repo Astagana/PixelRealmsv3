@@ -41,5 +41,6 @@ window.PR_ITEMS = [
    id bawaan: 40 = Gold Lock, 41 = Diamond Lock, 43 = Pickaxe, 44 = Wing, 45 = Speed Boots, 31 = Pepper, dst. */
 window.PR_SKINS = [
   { id: 40, src: 'assets/gold_lock.png' },
-  { id: 41, src: 'assets/diamond_lock.png' }
+  { id: 41, src: 'assets/diamond_lock.png' },
+  { id: 44, src: 'assets/wing.png' }
 ];

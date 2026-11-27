@@ -18,14 +18,15 @@ window.PR_ITEMS = [
     sheet: 'assets/Malevolent_Hair_Animated.png',
     cols: 4, rows: 3, frames: 12,  // susunan sprite sheet (kolom x baris) dan jumlah frame yang dipakai
     fps: 10,                       // kecepatan animasi (frame per detik). 12 frame / 10 fps = 1,2 detik per putaran
-    scale: 0.15,                   // ukuran: 1 px gambar = 0.15 px sprite karakter (naikkan = lebih besar)
+    scale: 0.22,                   // ukuran: 1 px gambar = 0.22 px sprite karakter (naikkan = lebih besar)
     anchor: [                      // titik pada frame (0..1) yang menempel di kepala; 1 pasang untuk semua frame, atau 1 pasang per frame
       [0.62, 0.57], [0.63, 0.575], [0.64, 0.57], [0.66, 0.57],
       [0.68, 0.58], [0.69, 0.55], [0.69, 0.53], [0.67, 0.54],
       [0.68, 0.54], [0.67, 0.53], [0.67, 0.535], [0.70, 0.54]
     ],
-    offset: [10, 0],                // geser manual (px sprite): [maju(+)/mundur(-), turun(+)/naik(-)]
-    layer: 'front',                 // 'back' = di belakang badan, 'front' = menutupi badan
+    offset: [1.5, -1.5],           // geser manual (px sprite): [maju(+)/mundur(-), turun(+)/naik(-)]
+    faceCut: [5.2, 4.6, 0.5, 4.0], // 'jendela wajah' agar wajah tidak tertutup: [lebar, tinggi, geser x, geser y] px sprite dari titik anchor. Hapus baris ini = tidak dilubangi
+    layer: 'front',                // 'front' = dipakai di atas kepala/badan, 'back' = di belakang badan
     trail: 'left',                 // arah gambar mengalir: 'left' | 'right' | 'none'. Otomatis dicerminkan agar selalu di belakang karakter
     hideBaseHair: true             // true = sembunyikan rambut bawaan saat dipakai
   }
@@ -41,6 +42,5 @@ window.PR_ITEMS = [
    id bawaan: 40 = Gold Lock, 41 = Diamond Lock, 43 = Pickaxe, 44 = Wing, 45 = Speed Boots, 31 = Pepper, dst. */
 window.PR_SKINS = [
   { id: 40, src: 'assets/gold_lock.png' },
-  { id: 41, src: 'assets/diamond_lock.png' },
-  { id: 44, src: 'assets/wing.png' }
+  { id: 41, src: 'assets/diamond_lock.png' }
 ];

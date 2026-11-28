@@ -85,7 +85,21 @@ window.PR_ITEMS = [
     layer: 'front',
     trail: 'left',
        hideBaseHair: true
+    }  ,{
+    id: 109,
+    name: 'Dias Hair',
+    slot: 'hair',
+    sheet: 'assets/curly_brown_hair.png',
+    cols: 1,
+    rows: 1,
+    frames: 1,
+    scale: 0.055,
+    anchor: [0.5, 0.55],
+    layer: 'front',
+    trail: 'none',
+       hideBaseHair: true
     }
+   
    
    
 

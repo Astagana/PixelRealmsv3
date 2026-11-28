@@ -71,7 +71,21 @@ window.PR_ITEMS = [
     layer: 'front',
     trail: 'right',
     hideBaseHair: true
+    }  ,{
+    id: 107,
+    name: 'Gamer Hair',
+    slot: 'hair',
+    price: 1600,
+    sheet: 'assets/gamer_undercut_hair.png',
+    cols: 1,
+    rows: 1,
+    frames: 1,
+    scale: 0.055,
+    anchor: [0.5, 0.55],
+    layer: 'front',
+    trail: 'left'
     }
+   
    
 
    

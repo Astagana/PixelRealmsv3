@@ -108,8 +108,8 @@ window.PR_ITEMS = [
     cols: 1,
     rows: 1,
     frames: 1,
-    scale: 0.055,
-    anchor: [0.05, 0.85],
+    scale: 0.020,
+    anchor: [0.5, 0.85],
     layer: 'front',
     trail: 'left'
     }

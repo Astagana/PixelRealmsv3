@@ -99,7 +99,21 @@ window.PR_ITEMS = [
     layer: 'front',
     trail: 'right',
        hideBaseHair: true
+    }  ,{
+    id: 112,
+    name: 'Beanie PixelRealm',
+    slot: 'hat',
+    price: 2100,
+    sheet: 'assets/beanie_pr.png',
+    cols: 1,
+    rows: 1,
+    frames: 1,
+    scale: 0.025,
+    anchor: [0.5, 0.55],
+    layer: 'front',
+    trail: 'left'
     }
+   
    
    
    

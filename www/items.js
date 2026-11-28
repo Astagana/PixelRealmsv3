@@ -89,6 +89,7 @@ window.PR_ITEMS = [
     id: 109,
     name: 'Dias Hair',
     slot: 'hair',
+    price: 2300,
     sheet: 'assets/curly_brown_hair.png',
     cols: 1,
     rows: 1,

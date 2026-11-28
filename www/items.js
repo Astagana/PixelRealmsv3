@@ -67,7 +67,7 @@ window.PR_ITEMS = [
     rows: 1,
     frames: 1,
     scale: 0.055,
-    anchor: [0.5, 0.55],
+    anchor: [0.5, 0.75],
     layer: 'front',
     trail: 'none',
     hideBaseHair: true

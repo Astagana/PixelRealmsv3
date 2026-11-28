@@ -56,7 +56,22 @@ window.PR_ITEMS = [
     layer: 'front',
     trail: 'left',
     hideBaseHair: true
-     }
+     },
+    {
+    id: 104,
+    name: 'Silver Spiky Hair',
+    slot: 'hair',
+    price: 1800,
+    sheet: 'assets/silver_spiky_hair.png',
+    cols: 1,
+    rows: 1,
+    frames: 1,
+    scale: 0.025,
+    anchor: [0.5, 0.55],
+    layer: 'front',
+    trail: 'none',
+    hideBaseHair: true
+    }
    
 
    
